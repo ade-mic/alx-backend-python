@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 The module import wait_n
 A  measure_time function with integers n and
