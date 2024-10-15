@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
     Executes async_comprehension four times in parallel and
     measures the total runtime.
