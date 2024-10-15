@@ -9,10 +9,10 @@ the asynchronous delay.
 """
 import asyncio
 import random
-from collections.abc import Generator
+from typing import Iterator
 
 
-async def async_generator() -> Generator[float, None, None]:
+async def async_generator() -> Iterator[float]:
     """
         A coroutine that asynchronously generates 10 random numbers
         between 0 and 10.
