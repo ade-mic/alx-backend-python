@@ -12,7 +12,7 @@ import random
 from typing import AsyncGenerator
 
 
-async def async_generator() -> AsyncGenerator[float]:
+async def async_generator() -> AsyncGenerator[float, None]:
     """
         A coroutine that asynchronously generates 10 random numbers
         between 0 and 10.
