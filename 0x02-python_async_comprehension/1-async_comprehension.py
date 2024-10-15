@@ -23,4 +23,4 @@ async def async_comprehension() -> List[AsyncGenerator]:
         numbers between 0 and 10.
     """
 
-    return [i async for i in async_generator]
+    return [i async for i in async_generator()]
