@@ -79,6 +79,3 @@ class TestGetJson(unittest.TestCase):
         utils.get_json.return_value = test_payload
         self.assertTrue(get_json(test_url))
 
-
-if __name__ == '__main__':
-    unittest.main()
