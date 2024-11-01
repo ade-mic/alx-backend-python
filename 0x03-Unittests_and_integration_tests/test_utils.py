@@ -1,6 +1,13 @@
 #!/usr/bin/env python3
 """
-test for utils
+TestAccessNestedMap
+Description
+The TestAccessNestedMap class contains unit tests for
+the utils.access_nested_map function.
+It inherits from unittest.TestCase and
+uses the parameterized.expand decorator to
+test multiple input scenarios, including both
+successful retrievals and expected exceptions.
 """
 from utils import access_nested_map
 import utils
@@ -11,7 +18,16 @@ from typing import Any, Dict, Tuple
 
 
 class TestAccessNestedMap(unittest.TestCase):
-    """Test for utils.access_nested_map"""
+    """
+    TestAccessNestedMap
+    Description
+    The TestAccessNestedMap class contains unit tests for
+    the utils.access_nested_map function.
+    It inherits from unittest.TestCase and
+    uses the parameterized.expand decorator to
+    test multiple input scenarios, including both
+    successful retrievals and expected exceptions.
+    """
 
     @parameterized.expand([
         ({"a": 1}, ("a",), 1),
@@ -20,6 +36,19 @@ class TestAccessNestedMap(unittest.TestCase):
     ])
     def test_nested_map(self, nested_map: Dict[str, Any],
                         path: Tuple[str, ...], expected: Any) -> None:
+        """
+        Description: Tests that utils.access_nested_map returns
+        the correct value for given inputs.
+        Parameters:
+                nested_map (Dict[str, Any]): The nested dictionary
+                from which to retrieve the value.
+                path (Tuple[str, …]): A sequence of keys that
+                specifies the path to the desired value in the
+                nested dictionary.
+                expected (Any): The expected value to be
+                  returned by the function.
+        Returns: None
+        """
         self.assertEqual(access_nested_map(nested_map=nested_map,
                                            path=path), expected)
 
