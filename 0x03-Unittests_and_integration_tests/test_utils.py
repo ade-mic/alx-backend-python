@@ -10,9 +10,10 @@ test multiple input scenarios, including both
 successful retrievals and expected exceptions.
 """
 from utils import access_nested_map
-from utils import get_json
+import utils
 from parameterized import parameterized
 import unittest
+from unittest.mock import patch
 from unittest.mock import Mock
 from typing import Any, Dict, Tuple
 
@@ -68,14 +69,18 @@ class TestAccessNestedMap(unittest.TestCase):
 
 class TestGetJson(unittest.TestCase):
     """Get Json unittest using Mock"""
-    get_json = Mock()
 
     @parameterized.expand([
        ("http://example.com", {"payload": True}),
        ("http://holberton.io", {"payload": False})
     ])
-    def test_get_json(self, test_url, test_payload):
+    @patch('utils.get_json')
+    def test_get_json(self, test_url, test_payload, mock_get_json):
         """test get_json from utils"""
-        get_json.return_value = test_payload
-        self.assertTrue(get_json(test_url))
+        mock_get_json.return_value = test_payload
+        self.assertEqual(utils.get_json(test_url), test_payload)
+        mock_get_json.assert_called_once_with(test_url)
 
+
+if __name__ == "__main__":
+    unittest.main()
