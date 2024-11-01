@@ -76,6 +76,6 @@ class TestGetJson(unittest.TestCase):
     ])
     def test_get_json(self, test_url, test_payload):
         """test get_json from utils"""
-        utils.get_json.return_value = test_payload
+        get_json.return_value = test_payload
         self.assertTrue(get_json(test_url))
 
