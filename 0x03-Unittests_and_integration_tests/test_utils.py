@@ -7,28 +7,32 @@ import utils
 from parameterized import parameterized
 import unittest
 from unittest.mock import Mock
+from typing import Any, Dict, Tuple
 
 
 class TestAccessNestedMap(unittest.TestCase):
-    """test for  utils.access_nested_map"""
+    """Test for utils.access_nested_map"""
+
     @parameterized.expand([
         ({"a": 1}, ("a",), 1),
-        ({"a": {"b": 2}}, ("a",), {'b': 2}),
+        ({"a": {"b": 2}}, ("a",), {"b": 2}),
         ({"a": {"b": 2}}, ("a", "b"), 2)
-        ])
-    def test_nested_map(self, nested_map, path, expected):
-        """test nested map function"""
-        self.assertEqual(access_nested_map(nested_map=nested_map, path=path),
-                         expected)
+    ])
+    def test_nested_map(self, nested_map: Dict[str, Any],
+                        path: Tuple[str, ...], expected: Any) -> None:
+        """Test nested map function"""
+        self.assertEqual(access_nested_map(nested_map=nested_map,
+                                           path=path), expected)
 
     @parameterized.expand([
         ({}, ("a",)),
-        ({"a", 1}, ("a", "b"))
+        ({"a": 1}, ("a", "b"))
     ])
-    def test_access_nested_map_exception(self, nested_map, path):
+    def test_access_nested_map_exception(self,
+                                         nested_map: Dict[str, Any],
+                                         path: Tuple[str, ...]) -> None:
         """
-         test that a KeyError is raised for
-           the following inputs
+        Test that a KeyError is raised for the following inputs
         """
         with self.assertRaises(KeyError):
             access_nested_map(nested_map=nested_map, path=path)
