@@ -37,7 +37,7 @@ class TestAccessNestedMap(unittest.TestCase):
         ({"a": {"b": 2}}, ("a", "b"), 2)
     ])
     def test_access_nested_map(self, nested_map: Dict[str, Any],
-                        path: Tuple[str, ...], expected: Any) -> None:
+                               path: Tuple[str, ...], expected: Any) -> None:
         """
         Description: Tests that utils.access_nested_map returns
         the correct value for given inputs.
@@ -88,18 +88,18 @@ class TestMemoize(unittest.TestCase):
     def test_memoize(self):
         """test memoie"""
 
-
         class TestClass:
 
             def a_method(self):
                 return 42
+
             @memoize
             def a_property(self):
                 return self.a_method()
 
-
         test_instance = TestClass()
-        with patch.object(TestClass, 'a_method', return_value=42) as mock_method:
+        with patch.object(TestClass, 'a_method',
+                          return_value=42) as mock_method:
             self.assertEqual(test_instance.a_property, 42)
             mock_method.assert_called_once()
             self.assertEqual(test_instance.a_property, 42)
