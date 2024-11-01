@@ -20,7 +20,6 @@ class TestAccessNestedMap(unittest.TestCase):
     ])
     def test_nested_map(self, nested_map: Dict[str, Any],
                         path: Tuple[str, ...], expected: Any) -> None:
-        """Test nested map function"""
         self.assertEqual(access_nested_map(nested_map=nested_map,
                                            path=path), expected)
 
