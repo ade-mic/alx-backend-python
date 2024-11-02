@@ -43,16 +43,17 @@ class TestGithubOrgClient(unittest.TestCase):
         """
         # Define the expected repos_url based on the org_name
         mock_org_repo_url = f"https://api.github.com/orgs/{org_name}/repos"
-  
+
         # Set the return value of the get_json mock
         mock_get_json.return_value = {"repos_url": mock_org_repo_url}
 
         client = GithubOrgClient(org_name)
         # Patch the org property within the context of this test
         with patch.object(GithubOrgClient, 'org',
-                           new_callable=PropertyMock) as mock_org:
-               mock_get_json.return_value = {"repos_url": mock_org_repo_url}
-            # Assert that _public_repos_url returns the correct repos_url from the payload
+                          new_callable=PropertyMock) as mock_org:
+            mock_get_json.return_value = {"repos_url": mock_org_repo_url}
+        # Assert that _public_repos_url returns
+        # the correct repos_url from the payload
         self.assertEqual(client._public_repos_url, mock_org_repo_url)
 
     @parameterized.expand([
@@ -82,7 +83,7 @@ class TestGithubOrgClient(unittest.TestCase):
                           new_callable=PropertyMock) as mock_public_repos_url:
             # Set the return value of the mocked _public_repos_url property
             mock_public_repos_url.return_value = mock_org_repo_url
-    
+
             # Call public_repos and check if it returns the correct repo names
             repos = client.public_repos()
             self.assertEqual(repos, ["repo1", "repo2"])
@@ -90,7 +91,6 @@ class TestGithubOrgClient(unittest.TestCase):
             # Ensure _public_repos_url and get_json are called correctly
             mock_public_repos_url.assert_called_once()
             mock_get_json.assert_called_once_with(mock_org_repo_url)
-
 
 
 # Run the tests
