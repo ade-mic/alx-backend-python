@@ -60,38 +60,39 @@ class TestGithubOrgClient(unittest.TestCase):
         ("google",),
         ("abc",),
     ])
-    @patch('utils.get_json')
+    @patch('client.get_json')
     def test_public_repos(self, org_name, mock_get_json):
         """Test GithubOrgClient.public_repos
-        returns the correct repo names."""
+          returns the correct list of repo names."""
 
-        # Define the expected repos_url based on the org_name
-        mock_org_repo_url = f"https://api.github.com/orgs/{org_name}/repos"
-
-        # Define a mock payload for repos
+        # Define the mock payload returned by get_json
+        # as a list of repo dictionaries
         mock_repos_payload = [
             {"name": "repo1", "license": {"key": "mit"}},
             {"name": "repo2", "license": {"key": "apache-2.0"}},
+            {"name": "repo3", "license": {"key": "mit"}},
         ]
-
-        # Set the return value of the get_json mock
         mock_get_json.return_value = mock_repos_payload
 
+        # Define the mock URL to be returned by _public_repos_url
+        mock_public_repos_url = f"https://api.github.com/orgs/{org_name}/repos"
+
+        # Create an instance of GithubOrgClient
         client = GithubOrgClient(org_name)
 
-        # Patch the _public_repos_url property within the context of this test
+        # Patch the _public_repos_url property to return the mock URL
         with patch.object(GithubOrgClient, '_public_repos_url',
-                          new_callable=PropertyMock) as mock_public_repos_url:
-            # Set the return value of the mocked _public_repos_url property
-            mock_public_repos_url.return_value = mock_org_repo_url
+                          new_callable=PropertyMock) as mock_public_url:
+            mock_public_url.return_value = mock_public_repos_url
 
-            # Call public_repos and check if it returns the correct repo names
+            # Call the public_repos method and verify the output
             repos = client.public_repos()
-            self.assertEqual(repos, ["repo1", "repo2"])
+            expected_repos = ["repo1", "repo2", "repo3"]
+            self.assertEqual(repos, expected_repos)
 
-            # Ensure _public_repos_url and get_json are called correctly
-            mock_public_repos_url.assert_called_once()
-            mock_get_json.assert_called_once_with(mock_org_repo_url)
+            # Check that _public_repos_url and get_json were called once
+            mock_public_url.assert_called_once()
+            mock_get_json.assert_called_once_with(mock_public_repos_url)
 
 
 # Run the tests
