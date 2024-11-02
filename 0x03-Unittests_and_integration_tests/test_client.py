@@ -60,9 +60,10 @@ class TestGithubOrgClient(unittest.TestCase):
         ("google",),
         ("abc",),
     ])
-    @patch('client.get_json')
+    @patch('utils.get_json')
     def test_public_repos(self, org_name, mock_get_json):
-        """Test GithubOrgClient.public_repos returns the correct repo names."""
+        """Test GithubOrgClient.public_repos
+        returns the correct repo names."""
 
         # Define the expected repos_url based on the org_name
         mock_org_repo_url = f"https://api.github.com/orgs/{org_name}/repos"
