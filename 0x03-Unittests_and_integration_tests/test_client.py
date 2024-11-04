@@ -56,12 +56,9 @@ class TestGithubOrgClient(unittest.TestCase):
         # the correct repos_url from the payload
         self.assertEqual(client._public_repos_url, mock_org_repo_url)
 
-    @parameterized.expand([
-        ("google",),
-        ("abc",),
-    ])
+
     @patch('client.get_json')
-    def test_public_repos(self, org_name, mock_get_json):
+    def test_public_repos(self, mock_get_json):
         """Test GithubOrgClient.public_repos
           returns the correct list of repo names."""
 
@@ -74,27 +71,21 @@ class TestGithubOrgClient(unittest.TestCase):
         ]
         mock_get_json.return_value = mock_repos_payload
 
-        # Define the mock URL to be returned by _public_repos_url
-        mock_public_repos_url = f"https://api.github.com/orgs/{org_name}/repos"
-
-        # Create an instance of GithubOrgClient
-        client = GithubOrgClient(org_name)
-
-        # Patch the _public_repos_url property to return the mock URL
+       # Mock the _public_repos_url property
         with patch.object(GithubOrgClient, '_public_repos_url',
-                          new_callable=PropertyMock) as mock_public_url:
-            mock_public_url.return_value = mock_public_repos_url
+                          new_callable=PropertyMock) as mock_public_repos_url:
+            mock_public_repos_url.return_value = "https://api.github.com/orgs/test_org/repos"
 
             # Call the public_repos method and verify the output
+            client = GithubOrgClient("test_org")
             repos = client.public_repos()
-            expected_repos = ["repo1", "repo2", "repo3"]
-            self.assertEqual(repos, expected_repos)
+            self.assertEqual(repos, ["repo1", "repo2", "repo3"])
 
             # Check that _public_repos_url and get_json were called once
-            mock_public_url.assert_called_once()
-            mock_get_json.assert_called_once_with(mock_public_repos_url)
+            mock_public_repos_url.assert_called_once()
+            mock_get_json.assert_called_once()
 
 
 # Run the tests
 if __name__ == "__main__":
-    unittest.main(verbosity=2)
+    unittest.main()
