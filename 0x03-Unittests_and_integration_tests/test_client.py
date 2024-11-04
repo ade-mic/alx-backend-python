@@ -2,7 +2,7 @@
 """A test suite for github org client
 """
 import unittest
-from unittest.mock import patch, PropertyMock, Mock
+from unittest.mock import patch, PropertyMock
 from parameterized import parameterized, parameterized_class
 from fixtures import TEST_PAYLOAD
 from client import GithubOrgClient
