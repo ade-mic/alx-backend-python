@@ -96,7 +96,7 @@ org_payload, repos_payload, expected_repos, apache2_repos = TEST_PAYLOAD[0]
 
 @parameterized_class(("org_payload", "repos_payload", "expected_repos", "apache2_repos"),
                      [
-                         (org_payload, repos_payload, expected_repos, apache2_repos)
+                        (org_payload, repos_payload, expected_repos, apache2_repos)
                      ])
 class TestIntegrationGithubOrgClient(unittest.TestCase):
     """Integration tests for GithubOrgClient.public_repos method."""
@@ -128,11 +128,11 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
 
     def test_public_repos(self):
         """Test public_repos returns expected repository names."""
-        self.assertEqual(self.client.public_repos(), self.expected_repos)
+        self.assertEqual(self.client.public_repos(), expected_repos)
 
     def test_public_repos_with_license(self):
         """Test public_repos with Apache 2.0 license filter."""
-        self.assertEqual(self.client.public_repos(license="apache-2.0"), self.apache2_repos)
+        self.assertEqual(self.client.public_repos(license="apache-2.0"), apache2_repos)
 
 
 # Run the tests
