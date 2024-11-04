@@ -9,7 +9,7 @@ from client import GithubOrgClient
 
 
 class TestGithubOrgClient(unittest.TestCase):
-
+    """Test GithubOrgClient """
     @parameterized.expand([
         ("google",),
         ("abc",),
@@ -56,17 +56,11 @@ class TestGithubOrgClient(unittest.TestCase):
         # the correct repos_url from the payload
         self.assertEqual(client._public_repos_url, mock_org_repo_url)
 
-    @parameterized.expand([
-        ("google",),
-        ("abc",),
-    ])
     @patch('client.get_json')
-    def test_public_repos(self, company_name, mock_get_json):
+    def test_public_repos(self, mock_get_json,):
         """Test GithubOrgClient.public_repos
           returns the correct list of repo names."""
 
-        # Define the mock payload returned by get_json
-        # as a list of repo dictionaries
         mock_repos_payload = [
             {"name": "repo1", "license": {"key": "mit"}},
             {"name": "repo2", "license": {"key": "apache-2.0"}},
@@ -81,7 +75,7 @@ class TestGithubOrgClient(unittest.TestCase):
             mock_public_repos_url.return_value = url
 
             # Call the public_repos method and verify the output
-            client = GithubOrgClient(company_name)
+            client = GithubOrgClient("test_org")
             repos = client.public_repos()
             self.assertEqual(repos, ["repo1", "repo2", "repo3"])
 
