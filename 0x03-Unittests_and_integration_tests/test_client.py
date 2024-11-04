@@ -2,9 +2,9 @@
 """A test suite for github org client
 """
 import unittest
-from unittest.mock import patch, PropertyMock
-from parameterized import parameterized
-
+from unittest.mock import patch, PropertyMock, Mock
+from parameterized import parameterized, parameterized_class
+from fixtures import TEST_PAYLOAD
 from client import GithubOrgClient
 
 
@@ -91,6 +91,48 @@ class TestGithubOrgClient(unittest.TestCase):
         """unit-test for GithubOrgClient.has_license """
         result = GithubOrgClient.has_license(repo=repo, license_key=license_key)
         self.assertEqual(result, expected_return)
+
+org_payload, repos_payload, expected_repos, apache2_repos = TEST_PAYLOAD[0]
+
+@parameterized_class(("org_payload", "repos_payload", "expected_repos", "apache2_repos"),
+                     [
+                         (org_payload, repos_payload, expected_repos, apache2_repos)
+                     ])
+class TestIntegrationGithubOrgClient(unittest.TestCase):
+    """Integration tests for GithubOrgClient.public_repos method."""
+
+    @classmethod
+    def setUpClass(cls):
+        """Set up the patcher to mock requests.get with payload fixtures."""
+        cls.get_patcher = patch('requests.get', side_effect=cls.mocked_requests_get)
+
+        # Start the patcher
+        cls.mock_get = cls.get_patcher.start()
+
+        # Instantiate client with test organization name
+        cls.client = GithubOrgClient('test_org')
+
+    @classmethod
+    def tearDownClass(cls):
+        """Tear down class method to stop patching requests.get."""
+        cls.get_patcher.stop()
+
+    @staticmethod
+    def mocked_requests_get(url):
+        """Mock function for requests.get, using side effects based on URL."""
+        if GithubOrgClient.ORG_URL.format(org="test_org") in url:
+            return Mock(status_code=200, json=lambda: org_payload)
+        elif "repos" in url:
+            return Mock(status_code=200, json=lambda: repos_payload)
+        return Mock(status_code=404)
+
+    def test_public_repos(self):
+        """Test public_repos returns expected repository names."""
+        self.assertEqual(self.client.public_repos(), self.expected_repos)
+
+    def test_public_repos_with_license(self):
+        """Test public_repos with Apache 2.0 license filter."""
+        self.assertEqual(self.client.public_repos(license="apache-2.0"), self.apache2_repos)
 
 
 # Run the tests
