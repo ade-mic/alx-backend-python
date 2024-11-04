@@ -56,7 +56,6 @@ class TestGithubOrgClient(unittest.TestCase):
         # the correct repos_url from the payload
         self.assertEqual(client._public_repos_url, mock_org_repo_url)
 
-
     @patch('client.get_json')
     def test_public_repos(self, mock_get_json):
         """Test GithubOrgClient.public_repos
@@ -71,10 +70,11 @@ class TestGithubOrgClient(unittest.TestCase):
         ]
         mock_get_json.return_value = mock_repos_payload
 
-       # Mock the _public_repos_url property
+        # Mock the _public_repos_url property
         with patch.object(GithubOrgClient, '_public_repos_url',
                           new_callable=PropertyMock) as mock_public_repos_url:
-            mock_public_repos_url.return_value = "https://api.github.com/orgs/test_org/repos"
+            url = "https://api.github.com/orgs/test_org/repos"
+            mock_public_repos_url.return_value = url
 
             # Call the public_repos method and verify the output
             client = GithubOrgClient("test_org")
