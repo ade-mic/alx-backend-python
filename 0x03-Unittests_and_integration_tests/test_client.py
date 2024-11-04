@@ -56,8 +56,12 @@ class TestGithubOrgClient(unittest.TestCase):
         # the correct repos_url from the payload
         self.assertEqual(client._public_repos_url, mock_org_repo_url)
 
+    @parameterized.expand([
+        ("google",),
+        ("abc",),
+    ])
     @patch('client.get_json')
-    def test_public_repos(self, mock_get_json):
+    def test_public_repos(self, company_name, mock_get_json):
         """Test GithubOrgClient.public_repos
           returns the correct list of repo names."""
 
@@ -77,7 +81,7 @@ class TestGithubOrgClient(unittest.TestCase):
             mock_public_repos_url.return_value = url
 
             # Call the public_repos method and verify the output
-            client = GithubOrgClient("test_org")
+            client = GithubOrgClient(company_name)
             repos = client.public_repos()
             self.assertEqual(repos, ["repo1", "repo2", "repo3"])
 
